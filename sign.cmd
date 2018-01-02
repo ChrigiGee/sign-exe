@@ -27,8 +27,11 @@ set ARGS=%ARGS% -ss  "%STORE_NAME%"
 ::---------------------------------------------------------Store-location [CurrentUser(default)|LocalMachine].
 set ARGS=%ARGS% -sr  "LocalMachine"
 ::---------------------------------------------------------Certificate subject X500 name.
-::set ARGS=%ARGS% -n "CN=* OU=* O=* L=* S=* C=*"
-set ARGS=%ARGS%   -n "CN=*"
+::set ARGS=%ARGS% -n "CN=*, OU=*, O=*, L=*, S=*, C=*" ::::fails on error converting the name.
+::set ARGS=%ARGS% -n "CN=*; OU=*; O=*; L=*; S=*; C=*" ::::fails on error converting the name.
+::set ARGS=%ARGS% -n "CN=* OU=* O=* L=* S=* C=*"      ::::wrong - everything sits in CN.
+::set ARGS=%ARGS% -n "CN=*"                           ::::ok
+set ARGS=%ARGS% -n "CN=*,OU=*,O=*,L=*,S=*"
 ::---------------------------------------------------------Comma separated enhanced key usage OIDs
 set ARGS=%ARGS% -eku "1.3.6.1.5.5.7.3.3"
 ::---------------------------------------------------------Algorithm [md5|sha1(default)|sha256|sha384|sha512].
@@ -103,3 +106,4 @@ call "%FILE_MAKECERT%" %ARGS% "%CERT_FILE%.cer"
 ::UI for installing certificate:   "C:\Windows\system32\rundll32.exe" cryptext.dll,CryptExtOpenCER C:\Users\Elad\Desktop\cert-exe\testing_certificate.cer
 
 
+pause
